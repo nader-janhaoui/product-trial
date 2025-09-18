@@ -22,7 +22,9 @@ public class Product {
         INSTOCK, LOWSTOCK, OUTOFSTOCK
     }
     public Product(ProductId id, String code, String name, String description, byte[] image, String category, double price, int quantity, String internalReference, int shellId, InventoryStatus inventoryStatus, int rating, long createdAt, long updatedAt) {
-        var validation = ProductValidator.validate(id, code, name, description, image, category, price, quantity, internalReference, shellId, inventoryStatus, rating);
+        // Validate the input
+        ProductValidator.validate(id, code, name, description, image, category, price, quantity, internalReference, shellId, inventoryStatus, rating);
+        
         this.id = id;
         this.code = code;
         this.name = name;
