@@ -61,8 +61,14 @@ public class Product {
     public void setShellId(int shellId) { this.shellId = shellId; }
     public InventoryStatus getInventoryStatus() { return inventoryStatus; }
     public void setInventoryStatus(InventoryStatus inventoryStatus) { this.inventoryStatus = inventoryStatus; }
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
+    public long getCreatedAt() { return createdAt; }
+    public void setCreatedAt(long createdAt) { this.createdAt = createdAt; }
+    public long getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(long updatedAt) { this.updatedAt = updatedAt; }
 
-
+    
 }
 
 
