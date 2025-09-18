@@ -1,4 +1,4 @@
-package com.example.domain.product.port.out;
+package com.example.application.product.port.out;
 
 import java.util.List;
 import java.util.Optional;
