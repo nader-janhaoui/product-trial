@@ -2,7 +2,9 @@ package com.example.application.product.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.example.application.product.dto.ProductDTO;
 import com.example.application.product.port.in.CreateProductUseCase;
 import com.example.application.product.port.in.DeleteProductUseCase;
 import com.example.application.product.port.in.GetProductsUseCase;
@@ -25,7 +27,9 @@ public class ProductService implements CreateProductUseCase, UpdateProductUseCas
     }
 
     @Override
-    public Product create(Product product) {
+    public ProductDTO create(ProductDTO productDTO) {
+        Product product = productDTO.toDomain();
+        
         // Check for duplicate product code
         if (productRepository.existsByCode(product.getCode())) {
             throw new IllegalArgumentException("Product with code " + product.getCode() + " already exists");
@@ -40,14 +44,17 @@ public class ProductService implements CreateProductUseCase, UpdateProductUseCas
             product.setUpdatedAt(currentTime);
         }
         
-        return productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        return ProductDTO.fromDomain(savedProduct);
     }
 
     @Override
-    public Product update(Product product) {
+    public ProductDTO update(ProductDTO productDTO) {
+        Product product = productDTO.toDomain();
+        
         // Verify product exists
         ProductId id = product.getId();
-        if (!productRepository.findById(id).isPresent()) {
+        if (productRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("Product with id " + id + " does not exist");
         }
         
@@ -63,26 +70,33 @@ public class ProductService implements CreateProductUseCase, UpdateProductUseCas
         // Update timestamp
         product.setUpdatedAt(System.currentTimeMillis());
         
-        return productRepository.save(product);
+        Product updatedProduct = productRepository.save(product);
+        return ProductDTO.fromDomain(updatedProduct);
     }
 
     @Override
-    public void deleteById(ProductId id) {
+    public void deleteById(String id) {
+        ProductId productId = ProductId.of(id);
+        
         // Verify product exists before deletion
-        if (!productRepository.findById(id).isPresent()) {
+        if (productRepository.findById(productId).isEmpty()) {
             throw new IllegalArgumentException("Product with id " + id + " does not exist");
         }
         
-        productRepository.deleteById(id);
+        productRepository.deleteById(productId);
     }
 
     @Override
-    public Optional<Product> getById(ProductId id) {
-        return productRepository.findById(id);
+    public Optional<ProductDTO> getById(String id) {
+        ProductId productId = ProductId.of(id);
+        return productRepository.findById(productId)
+                .map(ProductDTO::fromDomain);
     }
 
     @Override
-    public List<Product> getAll() {
-        return productRepository.findAll();
+    public List<ProductDTO> getAll() {
+        return productRepository.findAll().stream()
+                .map(ProductDTO::fromDomain)
+                .collect(Collectors.toList());
     }
 }
