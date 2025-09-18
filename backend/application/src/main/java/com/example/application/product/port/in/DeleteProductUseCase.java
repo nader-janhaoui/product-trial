@@ -1,4 +1,4 @@
-package com.example.domain.product.port.in;
+package com.example.application.product.port.in;
 
 import com.example.domain.product.ProductId;
 
