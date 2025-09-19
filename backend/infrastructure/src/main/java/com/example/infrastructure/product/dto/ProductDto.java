@@ -1,26 +1,61 @@
 package com.example.infrastructure.product.dto;
 
+import java.math.BigDecimal;
 import java.util.Base64;
 
 import com.example.application.product.dto.ProductDTO;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * DTO for the web layer. This converts between the application layer DTO and JSON representations.
  */
+@Schema(description = "Product data transfer object")
 public class ProductDto {
+    @Schema(description = "Unique identifier of the product", example = "123e4567-e89b-12d3-a456-426614174000")
     private String id;
+    
+    @Schema(description = "Code of the product", example = "P001")
     private String code;
+    
+    @Schema(description = "Name of the product", example = "Smartphone", requiredMode = io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED)
     private String name;
+    
+    @Schema(description = "Description of the product", example = "Latest model with advanced features")
     private String description;
+    
+    @Schema(description = "Image of the product in Base64 encoding")
     private String image; // Base64 encoded for JSON
+    
+    @Schema(description = "Category of the product", example = "Electronics")
     private String category;
-    private double price;
+    
+    @Schema(description = "Price of the product", example = "799.99", requiredMode = io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED)
+    private BigDecimal price;
+    
+    @Schema(description = "Quantity of the product in stock", example = "50")
     private int quantity;
+    
+    @Schema(description = "Internal reference code for the product")
     private String internalReference;
+    
+    @Schema(description = "Shell ID for the product")
     private int shellId;
+    
+    @Schema(
+        description = "Inventory status of the product", 
+        example = "INSTOCK", 
+        allowableValues = {"INSTOCK", "LOWSTOCK", "OUTOFSTOCK"}
+    )
     private String inventoryStatus;
+    
+    @Schema(description = "Rating of the product", example = "4")
     private int rating;
+    
+    @Schema(description = "Timestamp when the product was created", example = "1633072800000")
     private long createdAt;
+    
+    @Schema(description = "Timestamp when the product was last updated", example = "1633651200000")
     private long updatedAt;
     
     public ProductDto() {
@@ -36,7 +71,7 @@ public class ProductDto {
         this.description = description;
         this.image = image;
         this.category = category;
-        this.price = price;
+        this.price = BigDecimal.valueOf(price);
         this.quantity = quantity;
         this.internalReference = internalReference;
         this.shellId = shellId;
@@ -84,7 +119,7 @@ public class ProductDto {
             description,
             imageBytes,
             category,
-            price,
+            price != null ? price.doubleValue() : 0.0,
             quantity,
             internalReference,
             shellId,
@@ -146,11 +181,11 @@ public class ProductDto {
         this.category = category;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -208,5 +243,25 @@ public class ProductDto {
 
     public void setUpdatedAt(long updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductDto{" +
+                "id='" + id + '\'' +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", image='" + (image != null ? "[image data]" : "null") + '\'' +
+                ", category='" + category + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", internalReference='" + internalReference + '\'' +
+                ", shellId=" + shellId +
+                ", inventoryStatus='" + inventoryStatus + '\'' +
+                ", rating=" + rating +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }
